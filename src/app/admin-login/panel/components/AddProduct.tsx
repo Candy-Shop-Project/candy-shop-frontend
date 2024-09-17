@@ -25,7 +25,7 @@ export default function AddProduct() {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 
-    // uses isValidUrl helper function to check if url entered by user is correct
+    // uses isValidUrl helper function to check if url entered by user is correct (can be transfered to helper functions folder for code optimization)
     if (!isValidUrl(imageUrl)) {
       setErrorMessage("Please enter a valid URL.");
       setSuccessMessage(""); //clears success message
@@ -61,71 +61,69 @@ export default function AddProduct() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-lg">
-        <h2 className="mb-6 text-2xl font-bold text-center text-gray-800">
-          Add New Product
-        </h2>
-        {errorMessage && (
-          <div className="mb-4 text-sm text-red-600">{errorMessage}</div>
-        )}
-        {successMessage && (
-          <div className="mb-4 text-sm text-green-600">{successMessage}</div>
-        )}
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <input
-              type="text"
-              placeholder="Product Name"
-              value={productName}
-              onChange={(e) => setProductName(e.target.value)}
-              required
-              className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
-            />
-          </div>
-          <div>
-            <input
-              type="text"
-              placeholder="Description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              required
-              className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
-            />
-          </div>
-          <div>
-            <input
-              type="number"
-              placeholder="Price"
-              value={price}
-              onChange={(e) => setPrice(e.target.value)}
-              required
-              className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
-            />
-          </div>
-          <div>
-            <input
-              type="text"
-              placeholder="Image URL"
-              value={imageUrl}
-              onChange={(e) => setImageUrl(e.target.value)}
-              required
-              className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
-            />
-          </div>
-          <button
-            type="submit"
-            className={`w-full py-3 mt-4 font-bold text-white bg-blue-500 rounded focus:outline-none focus:ring-4 focus:ring-blue-300 ${
-              isSubmitting
-                ? "bg-blue-300 cursor-not-allowed"
-                : "hover:bg-blue-600"
-            }`}
-            disabled={isSubmitting} // disable button if submitting
-          >
-            {isSubmitting ? "Submitting..." : "Add Product"}
-          </button>
-        </form>
-      </div>
+    <div className="p-6 bg-white rounded-lg shadow-lg">
+      <h2 className="mb-4 text-2xl font-bold text-center text-gray-800">
+        Add New Product
+      </h2>
+      {errorMessage && (
+        <div className="mb-4 text-sm text-red-600">{errorMessage}</div>
+      )}
+      {successMessage && (
+        <div className="mb-4 text-sm text-green-600">{successMessage}</div>
+      )}
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <input
+            type="text"
+            placeholder="Product Name"
+            value={productName}
+            onChange={(e) => setProductName(e.target.value)}
+            required
+            className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+          />
+        </div>
+        <div>
+          <input
+            type="text"
+            placeholder="Description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            required
+            className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+          />
+        </div>
+        <div>
+          <input
+            type="number"
+            placeholder="Price"
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
+            required
+            className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+          />
+        </div>
+        <div>
+          <input
+            type="text"
+            placeholder="Image URL"
+            value={imageUrl}
+            onChange={(e) => setImageUrl(e.target.value)}
+            required
+            className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+          />
+        </div>
+        <button
+          type="submit"
+          className={`w-full py-3 mt-4 font-bold text-white bg-blue-500 rounded focus:outline-none focus:ring-4 focus:ring-blue-300 ${
+            isSubmitting
+              ? "bg-blue-300 cursor-not-allowed"
+              : "hover:bg-blue-600"
+          }`}
+          disabled={isSubmitting} // disable button if submitting
+        >
+          {isSubmitting ? "Submitting..." : "Add Product"}
+        </button>
+      </form>
     </div>
   );
 }
