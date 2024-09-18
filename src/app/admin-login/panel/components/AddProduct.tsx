@@ -2,6 +2,7 @@
 "use client";
 import { useState } from "react";
 import axios from "axios";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function AddProduct() {
   const [productName, setProductName] = useState(""); // product name
@@ -9,8 +10,12 @@ export default function AddProduct() {
   const [price, setPrice] = useState(""); // product price
   const [imageUrl, setImageUrl] = useState(""); // product image cdn (url)
   const [errorMessage, setErrorMessage] = useState(""); // error message
-  const [successMessage, setSuccessMessage] = useState(""); // success message
-  const [isSubmitting, setIsSubmitting] = useState(false); // state to disable button when during form submission
+  const [successMessage, setSuccessMessage] = useState(
+    "Product added successfully!"
+  ); // success message
+  const [isSubmitting, setIsSubmitting] = useState(false); // state to disable button during form submission
+  const [showToast, setShowToast] = useState(false); // state to control success toast visibility
+  const [showErrorToast, setShowErrorToast] = useState(false); // state to control error toast visibility
 
   // checks if input url is valid
   const isValidUrl = (url: string) => {
@@ -25,14 +30,17 @@ export default function AddProduct() {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 
-    // uses isValidUrl helper function to check if url entered by user is correct (can be transfered to helper functions folder for code optimization)
+    // uses isValidUrl helper function to check if url entered by user is correct
     if (!isValidUrl(imageUrl)) {
-      setErrorMessage("Please enter a valid URL.");
-      setSuccessMessage(""); //clears success message
+      setErrorMessage("Please enter a valid image URL."); // set specific error message for URL
+      setShowErrorToast(true); // show error toast
+      setTimeout(() => {
+        setShowErrorToast(false); // Automatically hide error toast after 5 seconds
+      }, 5000);
       return;
     }
 
-    setIsSubmitting(true); // disables button, until form submites(to prevent user repeatedly clicking on it)
+    setIsSubmitting(true); // disables button, until form submits(to prevent user repeatedly clicking on it)
 
     try {
       // change url later to env variable, if database url to add items will change
@@ -42,35 +50,39 @@ export default function AddProduct() {
         price: price,
         image_url: imageUrl,
       });
+      setShowErrorToast(false); // hide error toast if any
       setErrorMessage(""); // reset error message if submission was successful
       setSuccessMessage("Product added successfully!"); // set success message
+      setShowToast(true); // show success toast
       setProductName("");
       setDescription("");
       setPrice("");
       setImageUrl("");
+
+      // hide success toast after 3 seconds
+      setTimeout(() => {
+        setShowToast(false);
+      }, 3000);
     } catch (error: any) {
-      console.log("Some error occurred: ");
-      console.log(error); // logs error to browser console
-      const errorMsg =
-        "There was an error connecting to the database, please try again later"; // change to more user friendly(maybe)
-      setErrorMessage(errorMsg);
-      setSuccessMessage(""); // clear success message on error
+      setErrorMessage(
+        "There was an error adding the product to the database, please try again later."
+      ); // set general error message
+      setShowErrorToast(true); // show error toast
+      setTimeout(() => {
+        setShowErrorToast(false); // automatically hide error toast after 5 seconds
+      }, 5000);
+      console.log("Some error occurred: ", error); // logs error to browser console
     } finally {
       setIsSubmitting(false); // re enables button when request completes
     }
   };
 
   return (
-    <div className="p-6 bg-white rounded-lg shadow-lg">
+    <div className="p-6 bg-white rounded-lg shadow-lg relative">
       <h2 className="mb-4 text-2xl font-bold text-center text-gray-800">
         Add New Product
       </h2>
-      {errorMessage && (
-        <div className="mb-4 text-sm text-red-600">{errorMessage}</div>
-      )}
-      {successMessage && (
-        <div className="mb-4 text-sm text-green-600">{successMessage}</div>
-      )}
+
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <input
@@ -124,6 +136,38 @@ export default function AddProduct() {
           {isSubmitting ? "Submitting..." : "Add Product"}
         </button>
       </form>
+
+      {/* success toast with framer motion */}
+      <AnimatePresence>
+        {showToast && (
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 50 }}
+            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            className="fixed bottom-6 right-6 bg-green-600 text-white px-6 py-4 rounded-lg shadow-lg z-50 flex items-center space-x-3"
+          >
+            <span className="text-2xl">✅</span>
+            <span className="font-medium">{successMessage}</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* error toast*/}
+      <AnimatePresence>
+        {showErrorToast && (
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 50 }}
+            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            className="fixed bottom-6 right-6 bg-red-600 text-white px-6 py-4 rounded-lg shadow-lg z-50 flex items-center space-x-3"
+          >
+            <span className="text-2xl">⚠️</span>
+            <span className="font-medium">{errorMessage}</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
