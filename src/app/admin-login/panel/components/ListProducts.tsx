@@ -1,8 +1,9 @@
 "use client";
 
-import axios from "axios";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { deleteProduct, updateProduct } from "../services/productService"; // Import the service functions
+import axios from "axios";
 
 export default function ListProducts() {
   const [data, setData] = useState<any[]>([]);
@@ -10,8 +11,18 @@ export default function ListProducts() {
   const [successMessage, setSuccessMessage] = useState("");
   const [showSuccessToast, setShowSuccessToast] = useState(false); // state to control success toast visibility
   const [showErrorToast, setShowErrorToast] = useState(false); // state to control error toast visibility
-  const [showConfirmDialog, setShowConfirmDialog] = useState(false); // state to control confirmation dialog visibility
-  const [productToDelete, setProductToDelete] = useState<any>(null); // state to keep track of the product to delete
+  const [showDeleteConfirmDialog, setShowDeleteConfirmDialog] = useState(false); // show delete confirmation dialog
+  const [showUpdateConfirmDialog, setShowUpdateConfirmDialog] = useState(false); // show update confirmation dialog
+  const [productToDelete, setProductToDelete] = useState<any>(null); // state to track product selected for deletion
+  const [productToUpdate, setProductToUpdate] = useState<any>(null); // state to track product selected for update
+  const [updatedData, setUpdatedData] = useState<any>({
+    // state to hold updated product data for updateConfirmDialog
+    // default empty value for each key-value pair
+    name: "",
+    description: "",
+    price: "",
+    image_url: "",
+  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -21,7 +32,9 @@ export default function ListProducts() {
         );
         setData(response.data);
       } catch (error) {
-        console.error("Error fetching the products:", error);
+        setError("Error fetching products");
+        setShowErrorToast(true);
+        setTimeout(() => setShowErrorToast(false), 3000);
       }
     };
 
@@ -30,49 +43,74 @@ export default function ListProducts() {
 
   // function to show confirmation dialog
   const confirmDelete = (productId: any) => {
-    setProductToDelete(productId);
-    setShowConfirmDialog(true); // show confirmation dialog
+    setProductToDelete(productId); // set state to track id of product
+    setShowDeleteConfirmDialog(true); // show confirmation dialog
   };
 
   // function to handle confirmed delete action
   const handleDelete = async () => {
-    if (!productToDelete) return; // check if product is selected for deletion
-
+    if (!productToDelete) return;
     try {
-      await axios.delete(
-        `http://127.0.0.1:8000/shop/delete_product/${productToDelete}/` // delete product using productToDelete state
-      );
+      await deleteProduct(productToDelete); // use imported function from services/productServic to delete product
       setData(data.filter((product) => product.id !== productToDelete));
-      setSuccessMessage("Product deleted successfully."); //state to set success message
+      setSuccessMessage("Product deleted successfully"); //state to set success message
       setShowSuccessToast(true); // show success toast
-      setError(""); // clear error if any
-
-      //clear success message after 3 seconds
-      setTimeout(() => {
-        setShowSuccessToast(false);
-        setSuccessMessage("");
-      }, 3000);
-
-      console.log(`Product with ID: ${productToDelete} was deleted.`);
+      setTimeout(() => setShowSuccessToast(false), 3000); //clear success message after 3 seconds
     } catch (error) {
-      console.log("Error during deletion command: ", error);
+      // error handling
       setError("Error deleting product");
-      setShowErrorToast(true); // show error toast
-
-      // automatically hide the error toast after 3 seconds
-      setTimeout(() => {
-        setShowErrorToast(false);
-        setError("");
-      }, 3000);
+      setShowErrorToast(true);
+      setTimeout(() => setShowErrorToast(false), 3000); // clear error message  after 3 seconds
     } finally {
-      setShowConfirmDialog(false); // hide confirmation dialog after user select
+      setShowDeleteConfirmDialog(false); // hide delete confirmation dialog after user selec
       setProductToDelete(null); // reset productToDelete state to null
     }
   };
 
-  // handle update of product via productId(functionality not added yet)
-  const handleUpdate = (productId: any) => {
-    console.log(`Update product with ID: ${productId}`);
+  // show update confirmation dialog
+  const confirmUpdate = (product: any) => {
+    setProductToUpdate(product); // set the selected product to be updated
+    setUpdatedData({
+      name: product.name, // pre fill product name
+      description: product.description, // pre-fill product description
+      price: product.price, // pre-fill product price
+      image_url: product.image_url, // pre-fill product image URL
+    });
+    setShowUpdateConfirmDialog(true); // show update confirmation dialog
+  };
+
+  // handle update action
+  const handleUpdate = async () => {
+    if (!productToUpdate) return; // return if no product is selected
+    try {
+      const updatedProduct = await updateProduct(
+        productToUpdate.id, // pass the product id to be updated
+        updatedData // pass the updated product data (check updateProduct funtion in services folder)
+      );
+      setData(
+        data.map(
+          (product) =>
+            product.id === updatedProduct.id ? updatedProduct : product // update product in local data array
+        )
+      );
+      setSuccessMessage("Product updated successfully"); // show success message
+      setShowSuccessToast(true); // show success toast
+      setTimeout(() => setShowSuccessToast(false), 3000); // hide success toast after 3 seconds
+      console.log(updatedProduct); // for !testing! log updatedProduct to console
+    } catch (error) {
+      // error handling
+      setError("Error updating product");
+      setShowErrorToast(true); // trigger error toast
+      setTimeout(() => setShowErrorToast(false), 3000);
+    } finally {
+      setShowUpdateConfirmDialog(false); // close update confirmation dialog
+      setProductToUpdate(null); // reset product to update state
+    }
+  };
+
+  // handle input changes for update dialog
+  const handleInputChange = (e: any) => {
+    setUpdatedData({ ...updatedData, [e.target.name]: e.target.value }); // update form state with input values
   };
 
   return (
@@ -89,7 +127,7 @@ export default function ListProducts() {
               <span className="text-lg font-medium">{product.name}</span>
               <div className="flex space-x-2">
                 <button
-                  onClick={() => handleUpdate(product.id)}
+                  onClick={() => confirmUpdate(product)} // calls confirmUpdate function
                   className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition"
                 >
                   Update
@@ -105,10 +143,31 @@ export default function ListProducts() {
           ))}
         </ul>
       ) : (
-        <p className="text-gray-600 text-center">No products available</p>
+        <div className="flex justify-center items-center h-24">
+          <svg
+            className="animate-spin h-8 w-8 text-gray-600"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              className="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              strokeWidth="4"
+            ></circle>
+            <path
+              className="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8v8H4z"
+            ></path>
+          </svg>
+        </div>
       )}
 
-      {/* success toast with framer motion */}
+      {/* success toast */}
       <AnimatePresence>
         {showSuccessToast && (
           <motion.div
@@ -124,7 +183,7 @@ export default function ListProducts() {
         )}
       </AnimatePresence>
 
-      {/* error toast with framer motion */}
+      {/* error toast */}
       <AnimatePresence>
         {showErrorToast && (
           <motion.div
@@ -140,9 +199,9 @@ export default function ListProducts() {
         )}
       </AnimatePresence>
 
-      {/* confirmation dialog with framer motion */}
+      {/* delete confirmation dialog with framer motion */}
       <AnimatePresence>
-        {showConfirmDialog && productToDelete && (
+        {showDeleteConfirmDialog && productToDelete && (
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -180,7 +239,107 @@ export default function ListProducts() {
                   Yes, Delete
                 </button>
                 <button
-                  onClick={() => setShowConfirmDialog(false)}
+                  onClick={() => setShowDeleteConfirmDialog(false)}
+                  className="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400 transition"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* update confirmation dialog */}
+      <AnimatePresence>
+        {showUpdateConfirmDialog && productToUpdate && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+          >
+            <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
+              <h3 className="text-lg font-semibold mb-4 text-center">
+                Update this product
+              </h3>
+
+              {/* display Product Image */}
+              <div className="flex justify-center mb-4">
+                <img
+                  src={updatedData.image_url}
+                  alt={updatedData.name}
+                  className="w-48 h-48 object-cover rounded"
+                />
+              </div>
+
+              {/* product name */}
+              <div className="mb-4">
+                <label className="block text-sm font-semibold mb-2">Name</label>
+                <input
+                  type="text"
+                  name="name"
+                  value={updatedData.name}
+                  onChange={handleInputChange}
+                  className="p-3 border rounded w-full"
+                  placeholder="Product Name"
+                />
+              </div>
+
+              {/* product description */}
+              <div className="mb-4">
+                <label className="block text-sm font-semibold mb-2">
+                  Description
+                </label>
+                <textarea
+                  name="description"
+                  value={updatedData.description}
+                  onChange={handleInputChange}
+                  className="p-3 border rounded w-full h-24"
+                  placeholder="Product Description"
+                />
+              </div>
+
+              {/* product price */}
+              <div className="mb-4">
+                <label className="block text-sm font-semibold mb-2">
+                  Price
+                </label>
+                <input
+                  type="number"
+                  name="price"
+                  value={updatedData.price}
+                  onChange={handleInputChange}
+                  className="p-3 border rounded w-full"
+                  placeholder="Product Price"
+                />
+              </div>
+
+              {/* product image url */}
+              <div className="mb-4">
+                <label className="block text-sm font-semibold mb-2">
+                  Image URL
+                </label>
+                <textarea
+                  name="image_url"
+                  value={updatedData.image_url}
+                  onChange={handleInputChange}
+                  className="p-3 border rounded w-full h-16"
+                  placeholder="Product Image URL"
+                />
+              </div>
+
+              {/* confirmation buttons */}
+              <div className="flex justify-between">
+                <button
+                  onClick={handleUpdate}
+                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+                >
+                  Update
+                </button>
+                <button
+                  onClick={() => setShowUpdateConfirmDialog(false)}
                   className="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400 transition"
                 >
                   Cancel
