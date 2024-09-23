@@ -1,3 +1,5 @@
+//Google analytics script(use if neccessary)
+
 import React from "react";
 import Script from "next/script";
 

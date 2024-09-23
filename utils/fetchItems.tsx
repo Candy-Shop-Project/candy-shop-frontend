@@ -1,3 +1,6 @@
+//Fetch items function
+// not used anywhere for now
+
 export interface ShopItem {
   name: string;
   description: string;
