@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { deleteProduct, updateProduct } from "../services/productService"; // Import the service functions
 import axios from "axios";
+import { categories } from "../constants/addOrUpdateCategories"; // import categories object
 
 export default function ListProducts() {
   const [data, setData] = useState<any[]>([]);
@@ -16,12 +17,11 @@ export default function ListProducts() {
   const [productToDelete, setProductToDelete] = useState<any>(null); // state to track product selected for deletion
   const [productToUpdate, setProductToUpdate] = useState<any>(null); // state to track product selected for update
   const [updatedData, setUpdatedData] = useState<any>({
-    // state to hold updated product data for updateConfirmDialog
-    // default empty value for each key-value pair
     name: "",
     description: "",
     price: "",
     image_url: "",
+    category: "",
   });
 
   useEffect(() => {
@@ -75,6 +75,7 @@ export default function ListProducts() {
       description: product.description, // pre-fill product description
       price: product.price, // pre-fill product price
       image_url: product.image_url, // pre-fill product image URL
+      category: product.category || "", // pre-fill category if available
     });
     setShowUpdateConfirmDialog(true); // show update confirmation dialog
   };
@@ -328,6 +329,25 @@ export default function ListProducts() {
                   className="p-3 border rounded w-full h-16"
                   placeholder="Product Image URL"
                 />
+              </div>
+
+              {/* product category */}
+              <div className="mb-4">
+                <label className="block text-sm font-semibold mb-2">
+                  Category
+                </label>
+                <select
+                  name="category"
+                  value={updatedData.category}
+                  onChange={handleInputChange}
+                  className="p-3 border rounded w-full"
+                >
+                  {categories.map((category) => (
+                    <option key={category.value} value={category.value}>
+                      {category.label}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               {/* confirmation buttons */}

@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { categories } from "@/app/admin-login/panel/constants/categories"; //imports categories object used in multiple files, to change or add categories visit /constants/categories.ts file
 
 // types
 interface CategoryFilterProps {
@@ -12,13 +13,6 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({
   selectedCategory,
   onSelectCategory,
 }) => {
-  // different categories with labels and values(add here, if new cattegories appear)
-  const categories = [
-    { label: "All", value: null },
-    { label: "Cakes", value: "cake" },
-    { label: "Cookies", value: "cookie" },
-  ];
-
   return (
     <div className="flex justify-center items-center space-x-4 mb-6">
       {/* dynamically generated category buttons */}

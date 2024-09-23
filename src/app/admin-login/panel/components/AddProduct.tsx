@@ -3,12 +3,14 @@
 import { useState } from "react";
 import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
+import { categories } from "../constants/addOrUpdateCategories";
 
 export default function AddProduct() {
   const [productName, setProductName] = useState(""); // product name
   const [description, setDescription] = useState(""); // product description
   const [price, setPrice] = useState(""); // product price
   const [imageUrl, setImageUrl] = useState(""); // product image cdn (url)
+  const [category, setCategory] = useState(""); // set product category
   const [errorMessage, setErrorMessage] = useState(""); // error message
   const [successMessage, setSuccessMessage] = useState(
     "Product added successfully!"
@@ -30,6 +32,16 @@ export default function AddProduct() {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 
+    // validate if category is selected
+    if (!category) {
+      setErrorMessage("Please select a category.");
+      setShowErrorToast(true);
+      setTimeout(() => {
+        setShowErrorToast(false); // automatically hide error toast after 5 seconds
+      }, 5000);
+      return;
+    }
+
     // uses isValidUrl helper function to check if url entered by user is correct
     if (!isValidUrl(imageUrl)) {
       setErrorMessage("Please enter a valid image URL."); // set specific error message for URL
@@ -49,6 +61,7 @@ export default function AddProduct() {
         description: description,
         price: price,
         image_url: imageUrl,
+        category: category, // category state included
       });
       setShowErrorToast(false); // hide error toast if any
       setErrorMessage(""); // reset error message if submission was successful
@@ -58,6 +71,7 @@ export default function AddProduct() {
       setDescription("");
       setPrice("");
       setImageUrl("");
+      setCategory(""); // reset category after submission
 
       // hide success toast after 3 seconds
       setTimeout(() => {
@@ -124,6 +138,20 @@ export default function AddProduct() {
             className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
         </div>
+        <div>
+          <select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            required
+            className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+          >
+            {categories.map((cat) => (
+              <option key={cat.value} value={cat.value}>
+                {cat.label}
+              </option>
+            ))}
+          </select>
+        </div>
         <button
           type="submit"
           className={`w-full py-3 mt-4 font-bold text-white bg-blue-500 rounded focus:outline-none focus:ring-4 focus:ring-blue-300 ${
@@ -153,7 +181,7 @@ export default function AddProduct() {
         )}
       </AnimatePresence>
 
-      {/* error toast*/}
+      {/* error toast */}
       <AnimatePresence>
         {showErrorToast && (
           <motion.div
