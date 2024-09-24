@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { deleteProduct, updateProduct } from "../services/productService"; // Import the service functions
 import axios from "axios";
-import { categories } from "../constants/addOrUpdateCategories"; // import categories object
+import { categories } from "../../../components/MainPage/constants/addOrUpdateCategories"; // import categories object
 
 export default function ListProducts() {
   const [data, setData] = useState<any[]>([]);

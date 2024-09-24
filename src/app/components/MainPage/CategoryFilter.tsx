@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { categories } from "@/app/admin-login/panel/constants/categories"; //imports categories object used in multiple files, to change or add categories visit /constants/categories.ts file
+import { categories } from "@/app/components/MainPage/constants/categories"; //imports categories object used in multiple files, to change or add categories visit /constants/categories.ts file
 
 // types
 interface CategoryFilterProps {

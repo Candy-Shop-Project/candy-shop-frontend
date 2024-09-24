@@ -3,7 +3,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
-import { categories } from "../constants/addOrUpdateCategories";
+import { categories } from "../../../components/MainPage/constants/addOrUpdateCategories";
 
 export default function AddProduct() {
   const [productName, setProductName] = useState(""); // product name
