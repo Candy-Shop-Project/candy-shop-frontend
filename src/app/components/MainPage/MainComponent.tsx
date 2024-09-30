@@ -168,17 +168,8 @@ const MainComponent: React.FC = () => {
 
 // simple loading spinner component
 const LoadingSpinner = () => (
-  <div role="status">
-    <svg
-      aria-hidden="true"
-      className="w-16 h-16 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
-      viewBox="0 0 100 101"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      {/* SVG paths */}
-    </svg>
-    <span className="sr-only">Loading...</span>
+  <div className="flex items-center justify-center h-screen">
+    <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 border-solid"></div>
   </div>
 );
 
