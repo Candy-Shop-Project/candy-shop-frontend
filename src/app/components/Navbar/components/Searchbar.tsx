@@ -105,11 +105,8 @@ function Searchbar() {
         <div className="relative">
           <ul className="absolute left-0 top-0 mt-2 w-full bg-white border border-gray-300 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto">
             {data.map((item) => (
-              <Link href={`/products/${item.id}`}>
-                <li
-                  key={item.id}
-                  className="p-4 hover:bg-gray-100 cursor-pointer border-b border-gray-200 last:border-b-0"
-                >
+              <Link key={item.id} href={`/products/${item.id}`}>
+                <li className="p-4 hover:bg-gray-100 cursor-pointer border-b border-gray-200 last:border-b-0">
                   <p className="font-semibold text-gray-800">{item.name}</p>
                   <p className="text-sm text-gray-600 truncate">
                     {item.description}
