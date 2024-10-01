@@ -5,6 +5,7 @@ import axios from "axios";
 import Link from "next/link"; // for navigation to individual store page
 import CategoryFilter from "./CategoryFilter";
 import Pagination from "./Pagination"; // Import the Pagination component
+import { motion, AnimatePresence } from "framer-motion";
 
 // type definitions
 interface ShopItem {
@@ -23,6 +24,7 @@ const MainComponent: React.FC = () => {
   const [error, setError] = useState<string | null>(null); // state to handle errors
   const [currentPage, setCurrentPage] = useState<number>(1); // state to track the current page
   const itemsPerPage = 12; // number of items per page
+  const [showNotification, setShowNotification] = useState<boolean>(false); // item added notification state
 
   // function to fetch products based on the selected category
   const fetchProducts = async (category?: string) => {
@@ -56,6 +58,31 @@ const MainComponent: React.FC = () => {
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
+
+  // add item id which user added to the users cart
+  function addItemToCart(itemId: number) {
+    // retrieve existing cart from localStorage
+    const existingCart = localStorage.getItem("cart_keys");
+    let cart: number[] = [];
+
+    if (existingCart) {
+      cart = JSON.parse(existingCart);
+    }
+
+    // add new item id to the cart array
+    cart.push(itemId);
+
+    // save updated cart back to localStorage
+    localStorage.setItem("cart_keys", JSON.stringify(cart));
+
+    // show item added notification
+    setShowNotification(true);
+
+    // hide item added notification after 3 seconds
+    setTimeout(() => {
+      setShowNotification(false);
+    }, 2000);
+  }
 
   return (
     <div className="container mx-auto p-4">
@@ -144,7 +171,12 @@ const MainComponent: React.FC = () => {
 
                     {/* add to cart button */}
                     <div className="mt-4">
-                      <button className="block w-full rounded bg-yellow-400 py-2 text-sm font-medium transition hover:scale-105">
+                      <button
+                        className="block w-full rounded bg-yellow-400 py-2 text-sm font-medium transition hover:scale-105"
+                        onClick={() => {
+                          addItemToCart(item.id);
+                        }} // adds item to localStorage id for cart display
+                      >
                         Add to Cart
                       </button>
                     </div>
@@ -162,6 +194,22 @@ const MainComponent: React.FC = () => {
           </>
         )}
       </div>
+
+      {/* item added notification */}
+      <AnimatePresence>
+        {showNotification && (
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 50 }}
+            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            className="fixed bottom-6 right-6 bg-green-600 text-white px-6 py-4 rounded-lg shadow-lg z-50 flex items-center space-x-3"
+          >
+            <span className="text-2xl">✅</span>
+            <span className="font-medium">Item was added to your cart</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
