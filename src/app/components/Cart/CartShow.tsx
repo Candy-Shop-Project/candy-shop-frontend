@@ -3,6 +3,11 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import axios from "axios";
+import { motion, AnimatePresence } from "framer-motion";
+
+// redux
+import { setCartCount } from "../../../../store/slices/cartSlice"; // redux to set cart items count
+import { useAppDispatch } from "../../../../store"; // dispatch actions to redux
 
 interface Product {
   id: number;
@@ -19,6 +24,9 @@ interface CartShowProps {
 function CartShow({ onClose }: CartShowProps) {
   const [data, setData] = useState<Product[]>([]);
   const [totalPrice, setTotalPrice] = useState<number>(0);
+  const [itemRemoved, setItemRemoved] = useState(false);
+
+  const dispatch = useAppDispatch(); // dispatch function (redux)
 
   useEffect(() => {
     // check if localStorage is available
@@ -85,6 +93,9 @@ function CartShow({ onClose }: CartShowProps) {
         // update localStorage with new array
         localStorage.setItem("cart_keys", JSON.stringify(idsArray));
 
+        // dispatch removed item length to redux
+        dispatch(setCartCount(idsArray.length));
+
         // update the component state
         const newData = data.filter((item) => item.id !== itemId);
         setData(newData);
@@ -94,7 +105,14 @@ function CartShow({ onClose }: CartShowProps) {
           (sum: number, item: Product) => sum + (item.price as number),
           0
         );
-        setTotalPrice(total);
+
+        setTotalPrice(total); // set total price state
+
+        setItemRemoved(true); // show item removed notification
+
+        setTimeout(() => {
+          setItemRemoved(false);
+        }, 2000); // 2 seconds timer to reset itemRemoved state
       }
     }
   }
@@ -167,6 +185,22 @@ function CartShow({ onClose }: CartShowProps) {
           </div>
         </div>
       </div>
+
+      {/* item removed notification */}
+      <AnimatePresence>
+        {itemRemoved && (
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 50 }}
+            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            className="fixed bottom-6 right-6 bg-green-600 text-white px-6 py-4 rounded-lg shadow-lg z-50 flex items-center space-x-3"
+          >
+            <span className="text-2xl">✅</span>
+            <span className="font-medium">Item was removed from your cart</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

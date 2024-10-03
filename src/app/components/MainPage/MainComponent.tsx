@@ -6,6 +6,11 @@ import Link from "next/link"; // for navigation to individual store page
 import CategoryFilter from "./CategoryFilter";
 import Pagination from "./Pagination"; // Import the Pagination component
 import { motion, AnimatePresence } from "framer-motion";
+import ItemAdded from "../notifications/itemAdded";
+
+// redux
+import { setCartCount } from "../../../../store/slices/cartSlice"; // redux to set cart items count
+import { useAppDispatch } from "../../../../store"; // dispatch actions to redux
 
 // type definitions
 interface ShopItem {
@@ -25,6 +30,8 @@ const MainComponent: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1); // state to track the current page
   const itemsPerPage = 12; // number of items per page
   const [showNotification, setShowNotification] = useState<boolean>(false); // item added notification state
+
+  const dispatch = useAppDispatch(); // dispatch function (redux)
 
   // function to fetch products based on the selected category
   const fetchProducts = async (category?: string) => {
@@ -74,6 +81,9 @@ const MainComponent: React.FC = () => {
 
     // save updated cart back to localStorage
     localStorage.setItem("cart_keys", JSON.stringify(cart));
+
+    // dispatch the updated cart count to Redux
+    dispatch(setCartCount(cart.length));
 
     // show item added notification
     setShowNotification(true);
@@ -195,21 +205,8 @@ const MainComponent: React.FC = () => {
         )}
       </div>
 
-      {/* item added notification */}
-      <AnimatePresence>
-        {showNotification && (
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 50 }}
-            transition={{ type: "spring", stiffness: 300, damping: 20 }}
-            className="fixed bottom-6 right-6 bg-green-600 text-white px-6 py-4 rounded-lg shadow-lg z-50 flex items-center space-x-3"
-          >
-            <span className="text-2xl">✅</span>
-            <span className="font-medium">Item was added to your cart</span>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* item added component */}
+      <ItemAdded showNotification={showNotification} />
     </div>
   );
 };

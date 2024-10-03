@@ -4,6 +4,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import InstagramIcon from "@/app/components/SocialButtons/InstagramIcon";
+import { useAppDispatch } from "../../../../store"; // for dispatching redux actions
+import { setCartCount } from "../../../../store/slices/cartSlice";
+import ItemAdded from "@/app/components/notifications/itemAdded";
+import { motion, AnimatePresence } from "framer-motion";
+import { MdErrorOutline } from "react-icons/md"; // react icons
 
 interface ProductPageProps {
   params: { id: string };
@@ -22,30 +27,48 @@ interface Product {
 }
 
 const ProductPage: React.FC<ProductPageProps> = ({ params }) => {
-  // state to store product data
   const [product, setProduct] = useState<Product | null>(null);
-
-  // extract id from params object
+  const [showNotification, setShowNotification] = useState(false);
+  const [alreadyAdded, setAlreadyAdded] = useState(false); // already added item state
   const id = params.id;
+  const dispatch = useAppDispatch(); // redux dispatch func
 
-  // fetch product data inside useEffect hook
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        // Fetch product data based on id
         const response = await axios.get(
           `http://127.0.0.1:8000/shop/individual_product/${id}/` // change to env variable later
         );
         setProduct(response.data);
       } catch (error) {
-        console.error("Error fetching product data:", error); // handle error
+        console.error("Error fetching product data:", error);
       }
     };
 
     fetchProduct();
   }, [id]);
 
-  // if product data is not yet loaded, display a loading indicator
+  const addToCart = (id: number) => {
+    let cartItems = JSON.parse(localStorage.getItem("cart_keys") || "[]");
+    // if statement prevents duplicate entires to localStorage
+    if (!cartItems.includes(id)) {
+      cartItems.push(id); // add product id to cart array
+      localStorage.setItem("cart_keys", JSON.stringify(cartItems)); // update local storage
+      dispatch(setCartCount(cartItems.length)); // update redux state
+      setShowNotification(true);
+
+      setTimeout(() => {
+        setShowNotification(false);
+      }, 2000); // hide notification after 2 seconds
+    } else if (cartItems.includes(id)) {
+      setAlreadyAdded(true);
+
+      setTimeout(() => {
+        setAlreadyAdded(false);
+      }, 4000); // hides already added notification after 4 seconds
+    }
+  };
+
   if (!product) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -54,7 +77,6 @@ const ProductPage: React.FC<ProductPageProps> = ({ params }) => {
     );
   }
 
-  // if product data is loaded, render ui
   return (
     <section className="text-gray-700 body-font overflow-hidden bg-white">
       <div className="container px-5 py-24 mx-auto">
@@ -66,7 +88,6 @@ const ProductPage: React.FC<ProductPageProps> = ({ params }) => {
           />
           <div className="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
             <h2 className="text-sm title-font text-gray-500 tracking-widest">
-              {/* if decide to add brand to database */}
               {product.brand || ""}
             </h2>
             <h1 className="text-gray-900 text-3xl title-font font-medium mb-1">
@@ -74,7 +95,6 @@ const ProductPage: React.FC<ProductPageProps> = ({ params }) => {
             </h1>
             <div className="flex mb-4">
               <span className="flex items-center">
-                {/* star rating */}
                 {[...Array(5)].map((_, index) => (
                   <svg
                     key={index}
@@ -95,25 +115,47 @@ const ProductPage: React.FC<ProductPageProps> = ({ params }) => {
                   {product.reviews || 0} Reviews
                 </span>
               </span>
-              {/* pass product.instagram as link to InstagramIcon component, add instagram to database */}
               <InstagramIcon
                 link={product.instagram || "https://www.instagram.com/"}
               />
             </div>
             <p className="leading-relaxed">{product.description}</p>
-            {/* line */}
             <div className="flex mt-6 items-center pb-5 border-b-2 border-gray-200 mb-5"></div>
             <div className="flex">
               <span className="title-font font-medium text-2xl text-gray-900">
                 ${product.price}
               </span>
-              <button className="flex ml-auto text-white bg-red-500 border-0 py-2 px-6 focus:outline-none hover:bg-red-600 rounded">
+              <button
+                className="flex ml-auto text-white bg-red-500 border-0 py-2 px-6 focus:outline-none hover:bg-red-600 rounded"
+                onClick={() => addToCart(product.id)} // call addToCart func with product id
+              >
                 Add to Cart
               </button>
             </div>
           </div>
         </div>
       </div>
+      {/* item added notification */}
+      <ItemAdded showNotification={showNotification} />
+
+      {/* item already added to cart */}
+      <AnimatePresence>
+        {alreadyAdded && (
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 50 }}
+            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            className="fixed bottom-6 right-6 bg-blue-700 text-white px-6 py-4 rounded-lg shadow-lg z-50 flex items-center space-x-3"
+          >
+            {/* react icons error */}
+            <MdErrorOutline size={24} />
+            <span className="font-medium">
+              This item is already added to your cart
+            </span>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 };
