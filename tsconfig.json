@@ -27,7 +27,8 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "src/app/GoogleAnalytics",
-    ".next/types/app/admin-panel/page.tsx"
+    ".next/types/app/admin-panel/page.tsx",
+    "src/app/checkout/components/CheckoutForm.jsx"
   ],
   "exclude": ["node_modules"]
 }

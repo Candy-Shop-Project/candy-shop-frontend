@@ -9,7 +9,7 @@ interface ProvidersProps {
 }
 
 const Providers: FC<ProvidersProps> = ({ children }) => {
-  return <Provider store={store}>{children}</Provider>;
+  return <Provider store={store}>{children}</Provider>; // redux store provider to app
 };
 
 export default Providers;

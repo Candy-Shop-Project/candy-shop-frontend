@@ -1,9 +1,11 @@
+// CartShow tsx
 "use client";
 
 import React, { useEffect } from "react";
 import { useState } from "react";
 import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
 
 // redux
 import { setCartCount } from "../../../../store/slices/cartSlice"; // redux to set cart items count
@@ -179,9 +181,11 @@ function CartShow({ onClose }: CartShowProps) {
             <h3 className="text-lg font-semibold mb-4">
               Total: ${totalPrice.toFixed(2)}
             </h3>
-            <button className="w-full py-3 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">
-              Proceed to Checkout
-            </button>
+            <a href="/checkout">
+              <button className="w-full py-3 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">
+                Proceed to Checkout
+              </button>
+            </a>
           </div>
         </div>
       </div>

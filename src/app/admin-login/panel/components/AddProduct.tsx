@@ -9,6 +9,7 @@ export default function AddProduct() {
   const [productName, setProductName] = useState(""); // product name
   const [description, setDescription] = useState(""); // product description
   const [price, setPrice] = useState(""); // product price
+  const [priceID, setPriceID] = useState(""); // product price id for stripe
   const [imageUrl, setImageUrl] = useState(""); // product image cdn (url)
   const [category, setCategory] = useState(""); // set product category
   const [errorMessage, setErrorMessage] = useState(""); // error message
@@ -60,6 +61,7 @@ export default function AddProduct() {
         name: productName,
         description: description,
         price: price,
+        price_id: priceID,
         image_url: imageUrl,
         category: category, // category state included
       });
@@ -70,7 +72,7 @@ export default function AddProduct() {
       setProductName("");
       setDescription("");
       setPrice("");
-      setImageUrl("");
+      setPriceID(""), setImageUrl("");
       setCategory(""); // reset category after submission
 
       // hide success toast after 3 seconds
@@ -124,6 +126,16 @@ export default function AddProduct() {
             placeholder="Price"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
+            required
+            className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+          />
+        </div>
+        <div>
+          <input
+            type="string"
+            placeholder="Price ID"
+            value={price}
+            onChange={(e) => setPriceID(e.target.value)}
             required
             className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
           />

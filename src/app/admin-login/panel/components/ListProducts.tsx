@@ -20,6 +20,7 @@ export default function ListProducts() {
     name: "",
     description: "",
     price: "",
+    price_url: "",
     image_url: "",
     category: "",
   });
@@ -74,6 +75,7 @@ export default function ListProducts() {
       name: product.name, // pre fill product name
       description: product.description, // pre-fill product description
       price: product.price, // pre-fill product price
+      price_id: product.price_id, // pre-fill product price_id for stripe checkout
       image_url: product.image_url, // pre-fill product image URL
       category: product.category || "", // pre-fill category if available
     });
@@ -314,6 +316,21 @@ export default function ListProducts() {
                   onChange={handleInputChange}
                   className="p-3 border rounded w-full"
                   placeholder="Product Price"
+                />
+              </div>
+
+              {/* product_id for stripe checkout  */}
+              <div className="mb-4">
+                <label className="block text-sm font-semibold mb-2">
+                  Price ID for Stripe
+                </label>
+                <input
+                  type="string"
+                  name="price_id"
+                  value={updatedData.price_id}
+                  onChange={handleInputChange}
+                  className="p-3 border rounded w-full"
+                  placeholder="Price ID"
                 />
               </div>
 
