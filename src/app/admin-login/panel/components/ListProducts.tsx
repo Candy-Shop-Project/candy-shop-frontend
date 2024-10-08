@@ -29,7 +29,7 @@ export default function ListProducts() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://127.0.0.1:8000/shop/products/"
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/shop/products/`
         );
         setData(response.data);
       } catch (error) {

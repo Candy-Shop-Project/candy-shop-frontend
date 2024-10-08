@@ -57,14 +57,17 @@ export default function AddProduct() {
 
     try {
       // change url later to env variable, if database url to add items will change
-      await axios.post("http://127.0.0.1:8000/shop/add_product/", {
-        name: productName,
-        description: description,
-        price: price,
-        price_id: priceID,
-        image_url: imageUrl,
-        category: category, // category state included
-      });
+      await axios.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/shop/add_product/`,
+        {
+          name: productName,
+          description: description,
+          price: price,
+          price_id: priceID,
+          image_url: imageUrl,
+          category: category, // category state included
+        }
+      );
       setShowErrorToast(false); // hide error toast if any
       setErrorMessage(""); // reset error message if submission was successful
       setSuccessMessage("Product added successfully!"); // set success message
