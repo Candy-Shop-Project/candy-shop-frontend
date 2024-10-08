@@ -44,9 +44,12 @@ function CartShow({ onClose }: CartShowProps) {
         if (Array.isArray(idsArray) && idsArray.length > 0) {
           // fetch item details from backend
           axios
-            .post("http://127.0.0.1:8000/shop/get_multiple_products/", {
-              ids: idsArray, // body of request with ids array
-            })
+            .post(
+              `${process.env.NEXT_PUBLIC_BACKEND_URL}/shop/get_multiple_products/`,
+              {
+                ids: idsArray, // body of request with ids array
+              }
+            )
             .then((response) => {
               // update state with fetched data from api
               const products = response.data.map((item: Product) => {

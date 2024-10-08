@@ -7,7 +7,7 @@ import axios from "axios";
 export const updateProduct = async (productId: number, updatedData: any) => {
   try {
     const response = await axios.patch(
-      `http://127.0.0.1:8000/shop/update_product/${productId}/`, // change to url env
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/shop/update_product/${productId}/`, // change to url env
       updatedData
     );
     return response.data; // return updated product from the server
@@ -20,7 +20,7 @@ export const updateProduct = async (productId: number, updatedData: any) => {
 export const deleteProduct = async (productId: number) => {
   try {
     await axios.delete(
-      `http://127.0.0.1:8000/shop/delete_product/${productId}/` // change to url env
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/shop/delete_product/${productId}/` // change to url env
     );
   } catch (error) {
     throw new Error("Error deleting product");

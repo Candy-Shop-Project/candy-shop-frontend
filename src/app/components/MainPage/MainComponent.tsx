@@ -40,8 +40,8 @@ const MainComponent: React.FC = () => {
       setError(null); // reset error state before new API call
 
       const url = category
-        ? `http://127.0.0.1:8000/shop/products/?category=${category}` // query with category filter
-        : "http://127.0.0.1:8000/shop/products/"; // query all products
+        ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/shop/products/?category=${category}` // query with category filter
+        : `${process.env.NEXT_PUBLIC_BACKEND_URL}/shop/products/`; // query all products
 
       const response = await axios.get(url); // fetch data from backend
       setShopItems(response.data); // set state with response data

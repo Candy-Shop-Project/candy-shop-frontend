@@ -21,7 +21,9 @@ function SearchbarPhone() {
   // handle fetch on icon click
   function handleSearchIconClick() {
     axios
-      .get(`http://127.0.0.1:8000/shop/search_product/?search_product=${value}`)
+      .get(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/shop/search_product/?search_product=${value}`
+      )
       .then((response) => {
         setData(response.data);
       })
@@ -36,7 +38,7 @@ function SearchbarPhone() {
     if (value.trim().length > 2) {
       axios
         .get(
-          `http://127.0.0.1:8000/shop/search_product/?search_product=${value}`
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/shop/search_product/?search_product=${value}`
         )
         .then((response) => {
           setData(response.data);

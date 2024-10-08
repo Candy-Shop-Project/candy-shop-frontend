@@ -37,7 +37,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ params }) => {
     const fetchProduct = async () => {
       try {
         const response = await axios.get(
-          `http://127.0.0.1:8000/shop/individual_product/${id}/` // change to env variable later
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/shop/individual_product/${id}/` // change to env variable later
         );
         setProduct(response.data);
       } catch (error) {

@@ -24,7 +24,7 @@ function Searchbar() {
       // make get request to api with passed to function inputValue
       axios
         .get(
-          `http://127.0.0.1:8000/shop/search_product/?search_product=${inputValue}`
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/shop/search_product/?search_product=${inputValue}`
         )
         .then((response) => {
           setData(response.data); // update search results
