@@ -31,11 +31,14 @@ export async function middleware(request: NextRequest) {
 
     // attempt to refresh access token using Django backend refresh endpoint
     try {
-      const response = await fetch("http://localhost:8000/auth/jwt/refresh/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ refresh: refreshToken }), // sending the refresh token to backend
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/jwt/refresh/`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ refresh: refreshToken }), // sending the refresh token to backend
+        }
+      );
 
       if (response.ok) {
         // if the response is OK, get the new access token from response JSON
@@ -71,11 +74,14 @@ export async function middleware(request: NextRequest) {
 // verifies current user access token with django backend (this is hoisted function)
 async function verifyAccessToken(token: string): Promise<boolean> {
   try {
-    const response = await fetch("http://localhost:8000/auth/jwt/verify/", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ token }),
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/jwt/verify/`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token }),
+      }
+    );
 
     return response.ok; // return true if token verification is valid
   } catch (error) {
