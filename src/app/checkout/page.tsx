@@ -9,7 +9,7 @@ import {
 import axios from "axios";
 
 const stripePromise = loadStripe(
-  "" // stripe NEXT_ENV key here
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
 );
 
 export default function Page() {

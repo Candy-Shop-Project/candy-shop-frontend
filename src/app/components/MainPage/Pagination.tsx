@@ -25,7 +25,7 @@ const Pagination: React.FC<PaginationProps> = ({
   );
 
   return (
-    <div className="flex justify-center mt-16">
+    <div className="flex justify-center mt-16 mb-8">
       <button
         onClick={() => {
           scrollToTop();

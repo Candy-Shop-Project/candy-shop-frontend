@@ -96,7 +96,7 @@ const MainComponent: React.FC = () => {
 
   return (
     <div className="container mx-auto p-4">
-      <h2 className="text-3xl font-bold text-center mb-8">Shop Items</h2>
+      {/* <h2 className="text-3xl font-bold text-center mb-8">Shop Items</h2> */}
 
       {/* always render CategoryFilter, even when user selects category he wants */}
       <CategoryFilter
@@ -148,7 +148,7 @@ const MainComponent: React.FC = () => {
                     <img
                       src={item.image_url}
                       alt={item.name}
-                      className="h-48 w-full object-cover transition duration-500 group-hover:scale-105"
+                      className="h-48 w-full object-cover transition duration-500"
                     />
                   </Link>
 

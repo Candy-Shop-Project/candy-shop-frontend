@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import Searchbar from "./components/Searchbar";
+import SearchbarPhone from "./components/SearchbarPhone";
 
 import Cart from "../Cart/Cart";
 
@@ -95,7 +96,7 @@ function Navbar() {
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3 }}
-              className="md:hidden"
+              className="md:hidden pb-5"
             >
               <ul className="px-2 pt-2 pb-3 space-y-1">
                 <li>
@@ -113,7 +114,7 @@ function Navbar() {
                     onClick={() => setIsMobileMenuOpen(false)}
                     className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50"
                   >
-                    Shop
+                    About Us
                   </Link>
                 </li>
                 <li>
@@ -122,28 +123,12 @@ function Navbar() {
                     onClick={() => setIsMobileMenuOpen(false)}
                     className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50"
                   >
-                    Categories
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/about"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50"
-                  >
-                    About Us
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/contact"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50"
-                  >
                     Contact
                   </Link>
                 </li>
               </ul>
+              {/* Insert mobileMenuSearchbar here */}
+              <SearchbarPhone />
             </motion.div>
           )}
         </AnimatePresence>
