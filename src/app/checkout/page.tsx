@@ -9,7 +9,7 @@ import {
 import axios from "axios";
 
 const stripePromise = loadStripe(
-  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string
 );
 
 export default function Page() {
@@ -23,7 +23,7 @@ export default function Page() {
       try {
         // Fetch product data from Django backend using the product IDs
         const response = await axios.post(
-          "http://127.0.0.1:8000/shop/get_multiple_products/",
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/shop/get_multiple_products/`,
           {
             ids: cartKeys,
           }
