@@ -95,7 +95,7 @@ const MainComponent: React.FC = () => {
   }
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4 pt-20 md:pt-20">
       {/* <h2 className="text-3xl font-bold text-center mb-8">Shop Items</h2> */}
 
       {/* always render CategoryFilter, even when user selects category he wants */}

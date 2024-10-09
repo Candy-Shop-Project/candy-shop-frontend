@@ -78,7 +78,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ params }) => {
   }
 
   return (
-    <section className="text-gray-700 body-font overflow-hidden bg-white">
+    <section className="text-gray-700 body-font overflow-hidden bg-white pt-16 md:pt-20">
       <div className="container px-5 py-24 mx-auto">
         <div className="lg:w-4/5 mx-auto flex flex-wrap">
           <img

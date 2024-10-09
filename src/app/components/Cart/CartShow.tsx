@@ -185,7 +185,7 @@ function CartShow({ onClose }: CartShowProps) {
               Total: ${totalPrice.toFixed(2)}
             </h3>
             <a href="/checkout">
-              <button className="w-full py-3 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">
+              <button className="w-full py-3 bg-green-600 text-white rounded hover:bg-blue-700 transition-colors">
                 Proceed to Checkout
               </button>
             </a>

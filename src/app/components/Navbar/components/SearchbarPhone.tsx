@@ -83,7 +83,7 @@ function SearchbarPhone() {
         />
         {/* search icon button */}
         <button
-          className="absolute right-3 top-0 mt-2 text-gray-600 focus:outline-none"
+          className="absolute right-3 top-0 mt-2 text-gray-600 focus:outline-none "
           onClick={handleSearchIconClick} // handle instant db query
         >
           <svg
