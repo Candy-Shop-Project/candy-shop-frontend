@@ -15,8 +15,9 @@ interface ShopItem {
 function SearchbarPhone() {
   const [value, setValue] = useState(""); // store input values
   const [data, setData] = useState<any[]>([]); // fetch data with request
-  const [isFocused, setIsFocused] = useState(false); // focused state
   const [error, setError] = useState(""); // error state
+  const [isFocused, setIsFocused] = useState(false); // focused state
+  const wrapperRef = useRef<HTMLDivElement>(null);
 
   // handle fetch on icon click
   function handleSearchIconClick() {
@@ -49,8 +50,28 @@ function SearchbarPhone() {
     }
   }, [value]);
 
+  // handle clicks outside the component
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      // if click is outside component
+      if (
+        wrapperRef.current &&
+        !wrapperRef.current.contains(event.target as Node)
+      ) {
+        setIsFocused(false); // close dropdown
+      }
+    }
+
+    // add event listener
+    document.addEventListener("mousedown", handleClickOutside);
+    // remove event listener on cleanup
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
-    <div className="">
+    <div ref={wrapperRef}>
       <div className="relative">
         <input
           type="text"
@@ -58,6 +79,7 @@ function SearchbarPhone() {
           placeholder="Search products..."
           value={value}
           onChange={(e) => setValue(e.target.value)}
+          onFocus={() => setIsFocused(true)}
         />
         {/* search icon button */}
         <button
@@ -80,7 +102,8 @@ function SearchbarPhone() {
         </button>
       </div>
 
-      {data && data.length > 0 && (
+      {/* gonna display only if user is focused on this input*/}
+      {isFocused && data && data.length > 0 && (
         <div className="relative">
           <ul className="absolute left-0 top-0 mt-2 w-full bg-white border border-gray-300 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto">
             {data.map((item) => (

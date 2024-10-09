@@ -31,7 +31,7 @@ function Navbar() {
               </li>
               <li>
                 <Link
-                  href="/about"
+                  href="/about-us"
                   className="text-gray-600 hover:text-gray-800"
                 >
                   About Us
@@ -110,7 +110,7 @@ function Navbar() {
                 </li>
                 <li>
                   <Link
-                    href="/shop"
+                    href="/about-us"
                     onClick={() => setIsMobileMenuOpen(false)}
                     className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50"
                   >
@@ -119,7 +119,7 @@ function Navbar() {
                 </li>
                 <li>
                   <Link
-                    href="/categories"
+                    href="/contact"
                     onClick={() => setIsMobileMenuOpen(false)}
                     className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50"
                   >
