@@ -2,12 +2,12 @@
 "use client";
 
 import { useAppDispatch, useAppSelector } from "../../../../store";
-import { setCartCount } from "../../../../store/slices/cartSlice";
+import { setCartCount, toggleCart } from "../../../../store/slices/cartSlice";
 import { useEffect, useState } from "react";
 import CartShow from "./CartShow";
 
 function Cart() {
-  const [isOpen, setIsOpen] = useState(false);
+  const isOpen = useAppSelector((state) => state.cart.isOpen); // get redux isOpen state
   const countItem = useAppSelector((state) => state.cart.count); // gets cart count from redux state
   const dispatch = useAppDispatch();
 
@@ -20,9 +20,7 @@ function Cart() {
     <div className="relative text-gray-600 hover:text-gray-800">
       <button
         className="relative focus:outline-none"
-        onClick={() => {
-          setIsOpen(!isOpen);
-        }}
+        onClick={() => dispatch(toggleCart())}
       >
         <svg
           viewBox="0 0 24 24"
@@ -58,7 +56,7 @@ function Cart() {
       {isOpen ? (
         <CartShow
           onClose={() => {
-            setIsOpen(!isOpen);
+            dispatch(toggleCart());
           }}
         />
       ) : (
