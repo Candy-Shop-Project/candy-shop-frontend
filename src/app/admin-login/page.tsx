@@ -8,9 +8,11 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const router = useRouter();
+  const [isDisabled, setIsDisabled] = useState(false);
 
   const handleLogin = async (e: any) => {
     e.preventDefault();
+    setIsDisabled(true); // turn off login button
 
     const response = await fetch("/api/auth/login", {
       method: "POST",
@@ -24,6 +26,7 @@ const LoginPage = () => {
       const data = await response.json();
       setError(data.message); // error message returned from api/login if login was unsuccessful
     }
+    setIsDisabled(false); // turn back on login button
   };
 
   return (
@@ -58,7 +61,10 @@ const LoginPage = () => {
         </div>
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition duration-200"
+          className={`${
+            isDisabled ? "bg-gray-600" : "bg-blue-500"
+          } w-full text-white py-2 rounded-lg transition duration-200`}
+          disabled={isDisabled}
         >
           Login
         </button>

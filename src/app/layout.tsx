@@ -4,6 +4,7 @@ import Providers from "./providers"; //import the providers component
 // import GoogleAnalytics from "./GoogleAnalytics/GoogleAnalytics";
 import type { Metadata } from "next";
 import Navbar from "./components/Navbar/Navbar";
+import Footer from "./components/Footer/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,6 +26,7 @@ export default function RootLayout({
         <body className={inter.className}>
           <Navbar />
           {children}
+          <Footer />
         </body>
       </html>
     </Providers>

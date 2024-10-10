@@ -1,6 +1,8 @@
 // /products/[id]/page.tsx for individual product pages
 "use client";
 
+// pt-16 md:pt-20
+
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import InstagramIcon from "@/app/components/SocialButtons/InstagramIcon";
@@ -78,7 +80,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ params }) => {
   }
 
   return (
-    <section className="text-gray-700 body-font overflow-hidden bg-white pt-16 md:pt-20">
+    <section className="text-gray-700 body-font overflow-hidden bg-white pt-16 md:pt-20 pb-20 md:pb-96">
       <div className="container px-5 py-24 mx-auto">
         <div className="lg:w-4/5 mx-auto flex flex-wrap">
           <img
