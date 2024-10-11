@@ -30,7 +30,7 @@ export default function Instructions() {
             <span className="font-semibold">Price ID </span>
             from the events section. Look for{" "}
             <strong>A new price called price_... was created.</strong> Click on
-            it and copy the "id": price_... from the provided object.
+            it and copy the id: price_... from the provided object.
           </li>
           <li>
             Paste the copied <span className="font-semibold">Price ID</span>{" "}
@@ -51,7 +51,7 @@ export default function Instructions() {
             the particular product and paste it into the Image URL field.
           </li>
           <li>
-            Click on the "Add product" button after you fill out all required
+            Click on the Add product button after you fill out all required
             fields. If the image URL is incorrect, it will display an error
             message stating{" "}
             <span className="text-red-600">
