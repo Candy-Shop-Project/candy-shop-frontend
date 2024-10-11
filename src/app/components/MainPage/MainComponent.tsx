@@ -101,9 +101,10 @@ const MainComponent: React.FC = () => {
       {/* always render CategoryFilter, even when user selects category he wants */}
       <CategoryFilter
         selectedCategory={selectedCategory}
-        onSelectCategory={(category: string | null) =>
-          setSelectedCategory(category)
-        }
+        onSelectCategory={(category: string | null) => {
+          setSelectedCategory(category);
+          setCurrentPage(1); // when user changes category, set current page to 1 for correct pagination
+        }}
       />
 
       {/* conditional rendering for loading, error, and product display */}
