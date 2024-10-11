@@ -37,7 +37,7 @@ function Navbar() {
           {/* logo */}
           <div className="flex-shrink-0">
             <Link href="/" className="text-2xl font-bold text-gray-800">
-              CandyShop
+              <img src="/images/logo/logo5.svg" alt="Logo" className="h-10" />
             </Link>
           </div>
 
