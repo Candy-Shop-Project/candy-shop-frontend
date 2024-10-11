@@ -7,11 +7,7 @@ export default function Footer() {
       <div className="container mx-auto px-4 flex items-center justify-between">
         {/* left section - logo */}
         <div className="flex items-center">
-          <img
-            src="/images/logopathHere"
-            alt="Logo"
-            className="h-16" // item height adj
-          />
+          {/* <img src="/images/logo/logo5.svg" alt="Logo" className="h-6" /> */}
         </div>
 
         {/* center section - nav */}
