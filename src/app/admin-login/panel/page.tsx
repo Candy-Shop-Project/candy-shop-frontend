@@ -1,5 +1,6 @@
 import AddProduct from "./components/AddProduct";
 import ListProducts from "./components/ListProducts";
+import Instructions from "./components/Instructions";
 
 export default function Page() {
   return (
@@ -10,6 +11,7 @@ export default function Page() {
       <div className="flex flex-col md:flex-row gap-6">
         <div className="w-full md:w-1/2">
           <AddProduct />
+          <Instructions />
         </div>
 
         {/* right side */}
