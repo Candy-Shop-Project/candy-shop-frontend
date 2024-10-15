@@ -21,6 +21,11 @@ export default async function deleteProductHandler(
 
     const { productId } = req.query;
 
+    if (!productId) {
+      res.status(400).json({ message: "Product ID is required" });
+      return;
+    }
+
     // request to backend with access token in auth header
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/shop/delete_product/${productId}/`,
@@ -33,13 +38,18 @@ export default async function deleteProductHandler(
     );
 
     if (response.ok) {
-      res.status(204).end(); // no content response if success
+      res.status(204).end(); // no content response if successful
     } else {
-      const errorData = await response.json();
+      let errorData;
+      try {
+        errorData = await response.json();
+      } catch (err) {
+        errorData = { message: "Unexpected error" };
+      }
       res.status(response.status).json(errorData);
     }
   } catch (error) {
-    console.error("Error deleting product:", error);
-    res.status(500).json({ message: "Internal server error" });
+    console.error(`Error deleting product:`, error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 }

@@ -19,10 +19,8 @@ export const updateProduct = async (productId: number, updatedData: any) => {
 // delete product function
 export const deleteProduct = async (productId: number) => {
   try {
-    await axios.delete("/api/deleteProduct", {
-      params: { productId },
-    });
+    await axios.delete(`/api/deleteProduct?productId=${productId}`);
   } catch (error: any) {
-    throw new Error(error.response?.data?.message || "Error deleting product");
+    console.log(error);
   }
 };
