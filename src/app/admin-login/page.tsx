@@ -22,6 +22,7 @@ const LoginPage = () => {
 
     if (response.ok) {
       router.push("/admin-login/panel"); // redirect if login was successful
+      localStorage.setItem("isAdmin", "true");
     } else {
       const data = await response.json();
       setError(data.message); // error message returned from api/login if login was unsuccessful

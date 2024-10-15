@@ -9,8 +9,12 @@ import Cart from "../Cart/Cart";
 function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isNavbarScrolled, setIsNavbarScrolled] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
+    const checkAdminStatus = localStorage.getItem("isAdmin") === "true";
+    setIsAdmin(checkAdminStatus);
+
     const handleScroll = () => {
       // update state based on scroll position
       setIsNavbarScrolled(window.scrollY > 50);
@@ -69,12 +73,22 @@ function Navbar() {
           </div>
 
           {/* search bar */}
-          {/* if scrolled down it wont show */}
           {!isNavbarScrolled && <Searchbar />}
 
-          {/* cart menu button */}
+          {/* cart menu and admin icon */}
           <div className="flex items-center space-x-4">
             <Cart />
+
+            {/* admin icon displayed if isAdmin localStorage true */}
+            {isAdmin && (
+              <Link href="/admin-login/panel">
+                <img
+                  src="/images/icon/admin.svg"
+                  alt="Admin Icon"
+                  className="h-6 w-6"
+                />
+              </Link>
+            )}
 
             {/* mobile menu button */}
             <div className="md:hidden">
