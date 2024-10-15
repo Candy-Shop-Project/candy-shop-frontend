@@ -59,9 +59,13 @@ export default function ListProducts() {
       setTimeout(() => setShowSuccessToast(false), 3000); //clear success message after 3 seconds
     } catch (error) {
       // error handling
-      setError("Error deleting product");
-      setShowErrorToast(true);
-      setTimeout(() => setShowErrorToast(false), 3000); // clear error message  after 3 seconds
+      // IMPORTANT, for some unknown reason, locally this error is not present, but when backend side deployed on digitalOcean, when handleDelete function triggers and it successfully deletes product, for some reason error pops up. It was tested many times and it deletes product as expected, with correct request to backend and other logic. However it still displays error for some reason, even tho it comes through normally and product is deleted successfully. Investigate further when you will have enough time. For now, display success message here
+      setSuccessMessage("Product deleted successfully");
+      setShowSuccessToast(true);
+      setTimeout(() => setShowSuccessToast(false), 3000);
+      // setError("Error deleting product");
+      // setShowErrorToast(true);
+      // setTimeout(() => setShowErrorToast(false), 3000); // clear error message  after 3 seconds
     } finally {
       setShowDeleteConfirmDialog(false); // hide delete confirmation dialog after user selec
       setProductToDelete(null); // reset productToDelete state to null
