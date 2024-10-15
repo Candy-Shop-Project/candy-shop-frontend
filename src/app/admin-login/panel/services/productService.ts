@@ -7,22 +7,22 @@ import axios from "axios";
 export const updateProduct = async (productId: number, updatedData: any) => {
   try {
     const response = await axios.patch(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/shop/update_product/${productId}/`, // change to url env
+      `/api/updateProduct?productId=${productId}`, // pages/api/updateProduct.tsx
       updatedData
     );
     return response.data; // return updated product from the server
-  } catch (error) {
-    throw new Error("Error updating product");
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || "Error updating product");
   }
 };
 
 // delete product function
 export const deleteProduct = async (productId: number) => {
   try {
-    await axios.delete(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/shop/delete_product/${productId}/` // change to url env
-    );
-  } catch (error) {
-    throw new Error("Error deleting product");
+    await axios.delete("/api/deleteProduct", {
+      params: { productId },
+    });
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || "Error deleting product");
   }
 };

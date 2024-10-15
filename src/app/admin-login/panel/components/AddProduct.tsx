@@ -56,18 +56,17 @@ export default function AddProduct() {
     setIsSubmitting(true); // disables button, until form submits(to prevent user repeatedly clicking on it)
 
     try {
-      // change url later to env variable, if database url to add items will change
-      await axios.post(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/shop/add_product/`,
-        {
-          name: productName,
-          description: description,
-          price: price,
-          price_id: priceID,
-          image_url: imageUrl,
-          category: category, // category state included
-        }
-      );
+      // send request to api route instead of backend (in order to retrieve cookie from server for secury auth header pass)
+      // pages/api/addProduct.ts
+      const response = await axios.post("/api/addProduct", {
+        name: productName,
+        description: description,
+        price: price,
+        price_id: priceID,
+        image_url: imageUrl,
+        category: category,
+      });
+
       setShowErrorToast(false); // hide error toast if any
       setErrorMessage(""); // reset error message if submission was successful
       setSuccessMessage("Product added successfully!"); // set success message
@@ -137,7 +136,7 @@ export default function AddProduct() {
           <input
             type="string"
             placeholder="Price ID"
-            value={price}
+            value={priceID}
             onChange={(e) => setPriceID(e.target.value)}
             required
             className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
