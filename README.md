@@ -36,6 +36,11 @@ The project uses several modern technologies:
   <img src="public/images/icon/tailwind.svg" alt="Tailwind CSS" width="40" height="40"/>
 </p>
 
+## Backend
+Backend code in GitHub repository:
+
+- [Backend GitHub Repository](https://github.com/Candy-Shop-Project/candy-shop-backend)
+
 ## Screenshots
 
 ### Main Page
