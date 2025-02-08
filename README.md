@@ -1,14 +1,14 @@
 # Candy Shop  
 ## E-commerce website
 
-I built **CandyShop** as a personal project to showcase the latest web technologies like Next.js and React. I made sure to follow best practices so that this app could be friendly and secure for both customers and website owners.
+I built **CandyShop** as a personal project to showcase the latest web technologies like Next.js and React.
 
 ## Features
 
-CandyShop functions as a full-fledged e-commerce platform designed for both customers and administrators. It allows users to browse products, add them to the cart, and securely check out using Stripe for payments. Website owners have access to admin panel where they can manage products displayed on the site. This website can be expanded as the site owner wants, React components allows to scale the site well and conveniently manage it.
+CandyShop functions as e-commerce platform designed for both customers and administrators. It allows users to browse products, add them to the cart, securely check out using Stripe for payments. Website owners have access to admin panel where they can manage products displayed on the site. This website can be expanded as the site owner wants, React components allows to scale the site well.
 
 ### General Features:
-- **User**: Browse, search, and purchase products (chocolates, cakes, beverages, and more). Can filter by categories.
+- **User**: Browse, search, and purchase products (chocolates, cakes, beverages, etc). Can filter by categories.
 - **Admin**: Add, update, delete products. Including Stripe integration.
 - **Checkout**: Secure payments through Stripe API.
 - **Responsive Design**: Responsive design for mobile and desktop apps.
