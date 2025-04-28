@@ -79,7 +79,3 @@ These endpoints require authentication for managing products and categories.
 
 > **Note**: Other endpoints that require authentication:
 - **POST /auth/users/**: Create a new user (restricted to authenticated users who are admins).
-
-## License
-
-This is a personal project to show modern web technologies in action. If for some reason you need to use this code for commercial purposes, please contact me: **tbudahov@gmail.com**. Thank you.
